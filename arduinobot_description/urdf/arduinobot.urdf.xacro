@@ -205,16 +205,16 @@
     </joint>
 
         <!-- Transmissions-->
-    <xacro:default_transmission number="1"/>
+    <!-- <xacro:default_transmission number="1"/>
     <xacro:default_transmission number="2"/>
     <xacro:default_transmission number="3"/>
-    <xacro:default_transmission number="4"/>
+    <xacro:default_transmission number="4"/> -->
 
     <!-- gazebo ros_control plugin -->
-    <gazebo>
-        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    <!-- <gazebo>
+        <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
             <robotNamespace>/arduinobot</robotNamespace>
-            <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+            <robotSimType>gazebo_ros2_control/DefaultRobotHWSim</robotSimType>
             <legacyModeNS>true</legacyModeNS>
         </plugin>
 
@@ -225,6 +225,57 @@
           <offset>0</offset> 
           <maxEffort>${effort}</maxEffort>             
           <robotNamespace>/arduinobot</robotNamespace>
+        </plugin>
+    </gazebo> -->
+    <ros2_control name="GazeboSimSystem" type="system">
+    <hardware>
+        <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+    </hardware>
+        <joint name="joint_1">
+            <command_interface name="position"/>
+            <state_interface name="position">
+                <param name="initial_value">0.0</param>
+            </state_interface> 
+            <state_interface name="velocity"/>
+        </joint>
+
+        <joint name="joint_2">
+            <command_interface name="position"/>
+            <state_interface name="position">
+                <param name="initial_value">0.0</param>
+            </state_interface> 
+            <state_interface name="velocity"/>
+        </joint>
+
+        <joint name="joint_3">
+            <command_interface name="position"/>
+            <state_interface name="position">
+                <param name="initial_value">0.0</param>
+            </state_interface> 
+            <state_interface name="velocity"/>
+        </joint>
+
+        <joint name="joint_4">
+            <command_interface name="position"/>
+            <state_interface name="position">
+                <param name="initial_value">0.0</param>
+            </state_interface> 
+            <state_interface name="velocity"/>
+        </joint>
+
+        <joint name="joint_5">
+        <param name="mimic">joint_4</param>
+        <param name="multiplier">-1</param>
+            <command_interface name="position"/>
+            <state_interface name="position">
+                <param name="initial_value">0.0</param>
+            </state_interface> 
+            <state_interface name="velocity"/>
+        </joint>
+    </ros2_control>
+    <gazebo>
+        <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+            <parameters>$(find arduinobot_description)/config/arduinobot_controllers.yaml</parameters>
         </plugin>
     </gazebo>
 </robot>

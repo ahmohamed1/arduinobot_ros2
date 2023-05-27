@@ -3,7 +3,9 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-
+from launch.actions import  ExecuteProcess, RegisterEventHandler
+from launch.event_handlers import (OnExecutionComplete, OnProcessExit,
+                                OnProcessIO, OnProcessStart, OnShutdown)
 
 from launch_ros.actions import Node
 import xacro
@@ -31,6 +33,17 @@ def generate_launch_description():
     )
 
 
+    load_joint_state_controller = ExecuteProcess(
+        cmd=['ros2','control', 'load_controller', '--set-state', 'active',
+             'arm_controller'],
+             output='screen'
+    )
+    load_arm_controller = ExecuteProcess(
+        cmd=['ros2','control', 'load_controller', '--set-state', 'active',
+             'joint_state_broadcaster'],
+             output='screen'
+    )
+
 
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(
@@ -48,9 +61,20 @@ def generate_launch_description():
 
     # Run the node
     return LaunchDescription([
+        RegisterEventHandler(
+            event_handler=OnProcessExit(
+                target_action=spawn_entity,
+                on_exit=[load_joint_state_controller])
+        ),
+        RegisterEventHandler(
+            event_handler=OnProcessExit(
+                target_action=load_joint_state_controller,
+                on_exit=[load_arm_controller])
+        ),
         gazebo,
         node_robot_state_publisher,
         spawn_entity
+        
     ])
 
 

@@ -1,0 +1,25 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: arduinobot_description
+    relative_path: urdf/arduinobot.urdf.xacro
+  srdf:
+    relative_path: config/arduinobot.srdf
+  package_settings:
+    author_name: a
+    author_email: test@example.com
+    generated_timestamp: 1685209716
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
