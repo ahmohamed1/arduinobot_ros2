@@ -39,9 +39,9 @@ def generate_launch_description():
              output='screen'
     )
     load_arm_controller = ExecuteProcess(
-        cmd=['ros2','control', 'load_controller', '--set-state', 'active',
+        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
              'joint_state_broadcaster'],
-             output='screen'
+        output='screen'
     )
 
 
